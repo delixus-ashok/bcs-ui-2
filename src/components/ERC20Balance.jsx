@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { useMoralis, useERC20Balances } from "react-moralis";
 import { Skeleton, Table } from "antd";
 import { getEllipsisTxt } from "../helpers/formatters";
@@ -5,6 +6,13 @@ import { getEllipsisTxt } from "../helpers/formatters";
 function ERC20Balance(props) {
   const { data: assets } = useERC20Balances(props);
   const { Moralis } = useMoralis();
+
+  useEffect(() => {
+    console.log("sd34534fsdf", props);
+    if (!props.loggedStatus) {
+      props.history.push("/home");
+    }
+  }, [props.loggedStatus]);
 
   const columns = [
     {

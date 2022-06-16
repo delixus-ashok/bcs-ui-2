@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useMoralis } from "react-moralis";
 import { getEllipsisTxt } from "../../helpers/formatters";
 import { getExplorer } from "../../helpers/networks";
@@ -6,9 +6,16 @@ import "antd/dist/antd.css";
 import { Skeleton, Table } from "antd";
 import { useERC20Transfers } from "hooks/useERC20Transfers";
 
-function ERC20Transfers() {
+function ERC20Transfers(props) {
   const { ERC20Transfers, chainId } = useERC20Transfers();
   const { Moralis } = useMoralis();
+
+  useEffect(() => {
+    console.log("sd34534fsdf", props);
+    if (!props.loggedStatus) {
+      props.history.push("/home");
+    }
+  }, [props.loggedStatus]);
 
   const columns = [
     {

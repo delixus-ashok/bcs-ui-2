@@ -53,7 +53,7 @@ const getChainIdByName = (chainName) => {
 const IsNative = (address) =>
   address === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
 
-function DEX({ chain, customTokens = {} }) {
+function DEX({ history, loggedStatus, chain, customTokens = {} }) {
   const { trySwap, tokenList, getQuote } = useInchDex(chain);
 
   const { Moralis, isInitialized, chainId } = useMoralis();
@@ -66,6 +66,13 @@ function DEX({ chain, customTokens = {} }) {
   const [currentTrade, setCurrentTrade] = useState();
   const { fetchTokenPrice } = useTokenPrice();
   const [tokenPricesUSD, setTokenPricesUSD] = useState({});
+
+  useEffect(() => {
+    console.log("sd34534fsdf 34534", history, loggedStatus);
+    if (!loggedStatus) {
+      history.push("/home");
+    }
+  }, [loggedStatus]);
 
   const tokens = useMemo(() => {
     return { ...customTokens, ...tokenList };

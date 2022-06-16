@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useMoralis } from "react-moralis";
 
-function Ramper() {
+function Ramper(props) {
   const [ramper, setRamper] = useState();
   const { Moralis } = useMoralis();
   useEffect(() => {
@@ -14,6 +14,12 @@ function Ramper() {
     initPlugin();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Moralis.Plugins]);
+  useEffect(() => {
+    console.log("sd34534fsdf", props);
+    if (!props.loggedStatus) {
+      props.history.push("/home");
+    }
+  }, [props.loggedStatus]);
 
   return (
     <iframe

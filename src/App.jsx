@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import {
   BrowserRouter as Router,
@@ -7,6 +7,9 @@ import {
   Redirect,
 } from "react-router-dom";
 import Account from "components/Account/Account";
+import Login from "components/Login/Login";
+import Home from "components/Home/Home";
+import Register from "components/Register/Register";
 import Chains from "components/Chains";
 import TokenPrice from "components/TokenPrice";
 import ERC20Balance from "components/ERC20Balance";
@@ -14,7 +17,7 @@ import ERC20Transfers from "components/ERC20Transfers";
 import DEX from "components/DEX";
 import NFTBalance from "components/NFTBalance";
 import Wallet from "components/Wallet";
-import { Layout, Tabs } from "antd";
+import { Layout, Tabs, Button } from "antd";
 import "antd/dist/antd.css";
 import NativeBalance from "components/NativeBalance";
 import "./style.css";
@@ -24,6 +27,8 @@ import Text from "antd/lib/typography/Text";
 import Ramper from "components/Ramper";
 import MenuItems from "./components/MenuItems";
 const { Header, Footer } = Layout;
+import logo from "./images/delixus.png";
+import userdata from "./userdata.json";
 
 const styles = {
   content: {
@@ -46,6 +51,7 @@ const styles = {
     borderBottom: "2px solid rgba(0, 0, 0, 0.06)",
     padding: "0 10px",
     boxShadow: "0 1px 10px rgb(151 164 175 / 10%)",
+    backgroundColor: "#001529",
   },
   headerRight: {
     display: "flex",
@@ -54,8 +60,24 @@ const styles = {
     fontSize: "15px",
     fontWeight: "600",
   },
+  displayNone: {
+    display: "none",
+  },
 };
 const App = ({ isServerInfo }) => {
+  const [loggedStatus, setLoggedStatus] = useState(false);
+  const [checkLogged, setCheckLogged] = useState(false);
+  useEffect(() => {
+    var auth = localStorage.getItem("auth");
+    if (auth) {
+      setLoggedStatus(true);
+    } else {
+      setLoggedStatus(false);
+    }
+  }, [checkLogged]);
+  useEffect(() => {
+    localStorage.setItem("userdata", JSON.stringify(userdata));
+  }, []);
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } =
     useMoralis();
 
@@ -66,55 +88,133 @@ const App = ({ isServerInfo }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isWeb3Enabled]);
 
+  const handleLogout = () => {
+    setLoggedStatus(false);
+    localStorage.removeItem("auth");
+  };
   return (
-    <Layout style={{ height: "100vh", overflow: "auto" }}>
+    <Layout
+      style={{
+        height: "100vh",
+        overflow: "auto",
+        backgroundColor: "#0f0e13",
+        backgroundImage:
+          "radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%)",
+      }}
+    >
       <Router>
         <Header style={styles.header}>
           <Logo />
-          <MenuItems />
+          <MenuItems loggedStatus={loggedStatus} />
           <div style={styles.headerRight}>
             <Chains />
-            <TokenPrice
-              address="0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
-              chain="eth"
-              image="https://cloudflare-ipfs.com/ipfs/QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg/"
-              size="40px"
-            />
-            <NativeBalance />
-            <Account />
+            {loggedStatus && (
+              <>
+                <TokenPrice
+                  address="0x1f9840a85d5af5bf1d1762f925bdaddc4201f984"
+                  chain="eth"
+                  image="https://cloudflare-ipfs.com/ipfs/QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg/"
+                  size="40px"
+                />
+                <NativeBalance />
+                <Account />
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={() => handleLogout()}
+                  style={{ width: "100%" }}
+                >
+                  Logout
+                </Button>
+              </>
+            )}
           </div>
         </Header>
 
         <div style={styles.content}>
           <Switch>
-            <Route exact path="/quickstart">
-              <QuickStart isServerInfo={isServerInfo} />
-            </Route>
-            <Route path="/wallet">
-              <Wallet />
-            </Route>
-            <Route path="/1inch">
+            <Route path="/login">
               <Tabs defaultActiveKey="1" style={{ alignItems: "center" }}>
-                <Tabs.TabPane tab={<span>Ethereum</span>} key="1">
-                  <DEX chain="eth" />
+                <Tabs.TabPane tab={<span>Login</span>} key="1">
+                  <Login />
                 </Tabs.TabPane>
-                <Tabs.TabPane tab={<span>Binance Smart Chain</span>} key="2">
-                  <DEX chain="bsc" />
-                </Tabs.TabPane>
-                <Tabs.TabPane tab={<span>Polygon</span>} key="3">
-                  <DEX chain="polygon" />
+                <Tabs.TabPane tab={<span>Register</span>} key="2">
+                  <Register />
                 </Tabs.TabPane>
               </Tabs>
             </Route>
-            <Route path="/erc20balance">
-              <ERC20Balance />
+            <Route
+              path="/wallet"
+              render={(props) => (
+                <Wallet {...props} loggedStatus={loggedStatus} />
+              )}
+            />
+            {/* <Route exact path="/1inch">
+              <Tabs defaultActiveKey="1" style={{ alignItems: "center" }}>
+                <Tabs.TabPane tab={<span>Ethereum</span>} key="1">
+                  <DEX chain="eth" loggedStatus={loggedStatus} />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab={<span>Binance Smart Chain</span>} key="2">
+                  <DEX chain="bsc" loggedStatus={loggedStatus} />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab={<span>Polygon</span>} key="3">
+                  <DEX chain="polygon" loggedStatus={loggedStatus} />
+                </Tabs.TabPane>
+              </Tabs>
+            </Route> */}
+            <Route
+              exact
+              path="/1inch"
+              render={(props) => (
+                <Tabs defaultActiveKey="1" style={{ alignItems: "center" }}>
+                  <Tabs.TabPane tab={<span>Ethereum</span>} key="1">
+                    <DEX chain="eth" {...props} loggedStatus={loggedStatus} />
+                  </Tabs.TabPane>
+                  <Tabs.TabPane tab={<span>Binance Smart Chain</span>} key="2">
+                    <DEX chain="bsc" {...props} loggedStatus={loggedStatus} />
+                  </Tabs.TabPane>
+                  <Tabs.TabPane tab={<span>Polygon</span>} key="3">
+                    <DEX
+                      chain="polygon"
+                      {...props}
+                      loggedStatus={loggedStatus}
+                    />
+                  </Tabs.TabPane>
+                </Tabs>
+              )}
+            />
+            <Route
+              path="/home"
+              render={(props) => (
+                <Home
+                  {...props}
+                  checkLogged={checkLogged}
+                  setCheckLogged={setCheckLogged}
+                  loggedStatus={loggedStatus}
+                />
+              )}
+            />
+            <Route path="/quickstart">
+              <QuickStart isServerInfo={isServerInfo} />
             </Route>
-            <Route path="/onramp">
-              <Ramper />
-            </Route>
-            <Route path="/erc20transfers">
-              <ERC20Transfers />
-            </Route>
+            <Route
+              path="/erc20balance"
+              render={(props) => (
+                <ERC20Balance {...props} loggedStatus={loggedStatus} />
+              )}
+            />
+            <Route
+              path="/onramp"
+              render={(props) => (
+                <Ramper {...props} loggedStatus={loggedStatus} />
+              )}
+            />
+            <Route
+              path="/erc20transfers"
+              render={(props) => (
+                <ERC20Transfers {...props} loggedStatus={loggedStatus} />
+              )}
+            />
             <Route path="/nftBalance">
               <NFTBalance />
             </Route>
@@ -122,7 +222,7 @@ const App = ({ isServerInfo }) => {
               <Contract />
             </Route>
             <Route path="/">
-              <Redirect to="/quickstart" />
+              <Redirect to="/Home" />
             </Route>
             <Route path="/ethereum-boilerplate">
               <Redirect to="/quickstart" />
@@ -133,7 +233,7 @@ const App = ({ isServerInfo }) => {
           </Switch>
         </div>
       </Router>
-      <Footer style={{ textAlign: "center" }}>
+      <Footer style={{ textAlign: "center", display: "none" }}>
         <Text style={{ display: "block" }}>
           ⭐️ Please star this{" "}
           <a
@@ -174,7 +274,10 @@ const App = ({ isServerInfo }) => {
 
 export const Logo = () => (
   <div style={{ display: "flex" }}>
-    <svg
+    <a href="/home">
+      <img src={logo} alt="logo" className="w-60 cursor-pointer" />
+    </a>
+    {/* <svg
       width="60"
       height="38"
       viewBox="0 0 50 38"
@@ -193,7 +296,7 @@ export const Logo = () => (
         d="M39.7135 25.1249C37.1094 25.1025 34.9991 27.2127 34.9766 29.8169C34.9542 32.4211 37.0645 34.5313 39.6686 34.5538C41.1503 34.5538 42.5647 33.8578 43.4626 32.6905C43.53 32.6007 43.5973 32.4884 43.6871 32.3986C45.1015 30.221 44.4729 27.3025 42.2953 25.9107C41.532 25.3943 40.634 25.1249 39.7135 25.1249Z"
         fill="#B7E803"
       />
-    </svg>
+    </svg> */}
   </div>
 );
 
