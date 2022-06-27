@@ -1,11 +1,18 @@
 import React from "react";
 import { Card } from "antd";
+import { useEffect } from "react";
 import BankDetails from "components/BankDetails/BankDetails";
 import UPI from "components/UPI/UPI";
 import { Tabs } from "antd";
 import "antd/dist/antd.css";
 
 export default function UtilityPay(props) {
+  useEffect(() => {
+    console.log("sd34534fsdf 34534", history, props.loggedStatus);
+    if (!props.loggedStatus) {
+      history.push("/home");
+    }
+  }, [props.loggedStatus]);
   return (
     <div
       style={{
