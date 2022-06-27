@@ -28,7 +28,8 @@ import Ramper from "components/Ramper";
 import MenuItems from "./components/MenuItems";
 const { Header, Footer } = Layout;
 import logo from "./images/delixus.png";
-import userdata from "./userdata.json";
+// import userdata from "./userdata.json";
+import axios from "axios";
 
 const styles = {
   content: {
@@ -67,17 +68,6 @@ const styles = {
 const App = ({ isServerInfo }) => {
   const [loggedStatus, setLoggedStatus] = useState(false);
   const [checkLogged, setCheckLogged] = useState(false);
-  useEffect(() => {
-    var auth = localStorage.getItem("auth");
-    if (auth) {
-      setLoggedStatus(true);
-    } else {
-      setLoggedStatus(false);
-    }
-  }, [checkLogged]);
-  useEffect(() => {
-    localStorage.setItem("userdata", JSON.stringify(userdata));
-  }, []);
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } =
     useMoralis();
 
@@ -89,8 +79,17 @@ const App = ({ isServerInfo }) => {
   }, [isAuthenticated, isWeb3Enabled]);
 
   const handleLogout = () => {
-    setLoggedStatus(false);
-    localStorage.removeItem("auth");
+    const token = JSON.parse(localStorage.getItem("sessionData"));
+    console.log("token===>", token);
+    axios
+      .post(`https://3dc3-122-162-185-33.ngrok.io/logout`, token)
+      .then((response) => {
+        if (response.status === 200) {
+          setLoggedStatus(false);
+          localStorage.removeItem("sessionData");
+          localStorage.removeItem("auth");
+        }
+      });
   };
   return (
     <Layout
@@ -191,6 +190,7 @@ const App = ({ isServerInfo }) => {
                   checkLogged={checkLogged}
                   setCheckLogged={setCheckLogged}
                   loggedStatus={loggedStatus}
+                  setLoggedStatus={setLoggedStatus}
                 />
               )}
             />

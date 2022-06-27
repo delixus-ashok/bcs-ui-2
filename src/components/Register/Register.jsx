@@ -3,6 +3,7 @@ import { Card } from "antd";
 import { UserOutlined, KeyOutlined, MailOutlined } from "@ant-design/icons";
 import { Input, Button } from "antd";
 import Text from "antd/lib/typography/Text";
+import axios from "axios";
 
 const styles = {
   title: {
@@ -55,19 +56,13 @@ export default function Register() {
   const [rpass, setRpass] = useState("");
 
   const handleRegister = () => {
-    var userdata = JSON.parse(localStorage.getItem("userdata"));
-    let userObject = {
-      name: ruser,
-      email: remail,
-      password: rpass,
-    };
-
-    let userPresent = userdata.find((item) => item.email === userObject.email);
-    console.log("s54645654dfsdf", userPresent, userdata, userObject);
-    if (!userPresent) {
-      userdata.push(userObject);
-      localStorage.setItem("userdata", JSON.stringify(userdata));
-    }
+    axios
+      .post(`https://3dc3-122-162-185-33.ngrok.io/register`, {
+        email: remail,
+        password: rpass,
+        username: ruser,
+      })
+      .then((response) => console.log(response.data));
   };
   return (
     <Card style={styles.card}>
