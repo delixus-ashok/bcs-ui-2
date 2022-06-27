@@ -14,6 +14,7 @@ import Chains from "components/Chains";
 import TokenPrice from "components/TokenPrice";
 import ERC20Balance from "components/ERC20Balance";
 import ERC20Transfers from "components/ERC20Transfers";
+import UtilityPay from "components/UtilityPay/UtilityPay";
 import DEX from "components/DEX";
 import NFTBalance from "components/NFTBalance";
 import Wallet from "components/Wallet";
@@ -194,6 +195,17 @@ const App = ({ isServerInfo }) => {
                 />
               )}
             />
+            <Route
+              path="/UtilityPay"
+              render={(props) => (
+                <UtilityPay
+                  {...props}
+                  checkLogged={checkLogged}
+                  setCheckLogged={setCheckLogged}
+                  loggedStatus={loggedStatus}
+                />
+              )}
+            />
             <Route path="/quickstart">
               <QuickStart isServerInfo={isServerInfo} />
             </Route>
@@ -223,6 +235,9 @@ const App = ({ isServerInfo }) => {
             </Route>
             <Route path="/">
               <Redirect to="/Home" />
+            </Route>
+            <Route path="/">
+              <Redirect to="/UtilityPay" />
             </Route>
             <Route path="/ethereum-boilerplate">
               <Redirect to="/quickstart" />

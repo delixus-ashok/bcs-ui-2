@@ -1,11 +1,11 @@
 import React from "react";
 import { Card } from "antd";
-import Login from "components/Login/Login";
-import Register from "components/Register/Register";
+import BankDetails from "components/BankDetails/BankDetails";
+import UPI from "components/UPI/UPI";
 import { Tabs } from "antd";
 import "antd/dist/antd.css";
 
-export default function Home(props) {
+export default function UtilityPay(props) {
   return (
     <div
       style={{
@@ -52,28 +52,41 @@ export default function Home(props) {
           ></button> */}
         </div>
       </Card>
-      {!props.loggedStatus && (
-        <Card
-          size="large"
-          style={{
-            width: "40%",
-            boxShadow: "0 0.5rem 1.2rem rgb(189 197 209 / 20%)",
-            border: "1px solid #e7eaf3",
-            borderRadius: "0.5rem",
-          }}
-        >
-          <div className="flex flex-1 justify-start flex-col mf:mr-10">
-            <Tabs defaultActiveKey="1" style={{ alignItems: "center" }}>
-              <Tabs.TabPane tab={<span>Login</span>} key="1">
-                <Login {...props} />
-              </Tabs.TabPane>
-              <Tabs.TabPane tab={<span>Register</span>} key="2">
-                <Register {...props} />
-              </Tabs.TabPane>
-            </Tabs>
-          </div>
-        </Card>
-      )}
+
+      <Card
+        size="large"
+        style={{
+          width: "40%",
+          boxShadow: "0 0.5rem 1.2rem rgb(189 197 209 / 20%)",
+          border: "1px solid #e7eaf3",
+          borderRadius: "0.5rem",
+        }}
+      >
+        <div className="flex flex-1 justify-start flex-col mf:mr-10">
+          <Tabs defaultActiveKey="1" style={{ alignItems: "center" }}>
+            <Tabs.TabPane
+              tab={
+                <span>
+                  <h1>BankDetails</h1>
+                </span>
+              }
+              key="1"
+            >
+              <BankDetails {...props} />
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              tab={
+                <span>
+                  <h1>UPI</h1>
+                </span>
+              }
+              key="2"
+            >
+              <UPI {...props} />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+      </Card>
     </div>
   );
 }
