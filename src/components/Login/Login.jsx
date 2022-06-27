@@ -3,6 +3,7 @@ import { Card } from "antd";
 import { MailOutlined, KeyOutlined } from "@ant-design/icons";
 import { Input, Button } from "antd";
 import Text from "antd/lib/typography/Text";
+import axios from "axios";
 
 const styles = {
   title: {
@@ -53,26 +54,23 @@ export default function Login(props) {
   const [lemail, setLemail] = useState("");
   const [lpass, setLpass] = useState("");
   const handleLogin = () => {
-    let loginData = {
-      email: lemail,
-      password: lpass,
-    };
-    console.log("dsafdsf before", props, userdata);
-    var userdata = JSON.parse(localStorage.getItem("userdata"));
-    console.log("dsafdsf before", props, userdata);
-    let userPresent = userdata.filter((item) => item.email === loginData.email);
-    if (
-      userPresent &&
-      userPresent[0] &&
-      userPresent[0].password === loginData.password
-    ) {
-      localStorage.setItem("auth", true);
-    } else {
-      localStorage.removeItem("auth");
-    }
-
-    props.setCheckLogged(!props.checkLogged);
-    console.log("dsafdsf", loginData, localStorage);
+    axios
+      .post(`https://3dc3-122-162-185-33.ngrok.io/login`, {
+        email: lemail,
+        password: lpass,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          props.setLoggedStatus(true);
+          console.log("response===>", response.data[0].token);
+          const session = {
+            email: lemail,
+            session_token: response.data[0].token,
+          };
+          localStorage.setItem("sessionData", JSON.stringify(session));
+          localStorage.setItem("auth", true);
+        }
+      });
   };
   return (
     <Card style={styles.card}>
