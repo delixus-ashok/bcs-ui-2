@@ -108,12 +108,10 @@ function Account() {
       {/* <button
         onClick={async () => {
           try {
-            console.log("change")
             await web3._provider.request({
               method: "wallet_switchEthereumChain",
               params: [{ chainId: "0x38" }],
             });
-            console.log("changed")
           } catch (e) {
             console.error(e);
           }

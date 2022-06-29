@@ -57,12 +57,17 @@ export default function Register() {
 
   const handleRegister = () => {
     axios
-      .post(`https://3dc3-122-162-185-33.ngrok.io/register`, {
+      .post(`http://127.0.0.1:8000/register`, {
         email: remail,
         password: rpass,
         username: ruser,
       })
-      .then((response) => console.log(response.data));
+      .then((response) => {
+        console.log(response);
+        setRuser("");
+        setRemail("");
+        setRpass("");
+      });
   };
   return (
     <Card style={styles.card}>

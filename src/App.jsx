@@ -82,15 +82,13 @@ const App = ({ isServerInfo }) => {
   const handleLogout = () => {
     const token = JSON.parse(localStorage.getItem("sessionData"));
     console.log("token===>", token);
-    axios
-      .post(`https://3dc3-122-162-185-33.ngrok.io/logout`, token)
-      .then((response) => {
-        if (response.status === 200) {
-          setLoggedStatus(false);
-          localStorage.removeItem("sessionData");
-          localStorage.removeItem("auth");
-        }
-      });
+    axios.post(`http://127.0.0.1:8000/logout`, token).then((response) => {
+      if (response.status === 200) {
+        setLoggedStatus(false);
+        localStorage.removeItem("sessionData");
+        localStorage.removeItem("auth");
+      }
+    });
   };
   return (
     <Layout

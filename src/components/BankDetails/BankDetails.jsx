@@ -70,12 +70,11 @@ export default function BankDetails() {
 
     axios
       .post(
-        `https://3dc3-122-162-185-33.ngrok.io/get-estimate?payment_method=bankTransfer&vendor_name=${buser}&amount=${bamd}&account_number=${acnum}&ifsc=${ifsc}&validate=false`,
+        `http://127.0.0.1:8000/get-estimate?payment_method=bankTransfer&vendor_name=${buser}&amount=${bamd}&account_number=${acnum}&ifsc=${ifsc}&validate=false`,
         params,
       )
       .then((response) => {
         if (response) {
-          console.log("sdfsdf", response);
           if (response.data[1] === 200) {
             if (response.data[0].error) {
               setMsg(response.data[0].error);

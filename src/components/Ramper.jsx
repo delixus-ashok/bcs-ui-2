@@ -15,7 +15,6 @@ function Ramper(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Moralis.Plugins]);
   useEffect(() => {
-    console.log("sd34534fsdf", props);
     if (!props.loggedStatus) {
       props.history.push("/home");
     }

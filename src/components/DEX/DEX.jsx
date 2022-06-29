@@ -68,7 +68,6 @@ function DEX({ history, loggedStatus, chain, customTokens = {} }) {
   const [tokenPricesUSD, setTokenPricesUSD] = useState({});
 
   useEffect(() => {
-    console.log("sd34534fsdf 34534", history, loggedStatus);
     if (!loggedStatus) {
       history.push("/home");
     }

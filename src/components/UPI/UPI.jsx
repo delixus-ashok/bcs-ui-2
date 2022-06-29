@@ -68,7 +68,7 @@ const UPI = () => {
 
     axios
       .post(
-        `https://3dc3-122-162-185-33.ngrok.io/get-estimate?payment_method=upi&vendor_name=${venuser}&upi_id=${upiid}&amount=${uamd}&account_number=39238765008&ifsc=HDFC0000053&validate=false`,
+        `http://127.0.0.1:8000/get-estimate?payment_method=upi&vendor_name=${venuser}&upi_id=${upiid}&amount=${uamd}&account_number=39238765008&ifsc=HDFC0000053&validate=false`,
       )
       .then((response) => {
         if (response) {

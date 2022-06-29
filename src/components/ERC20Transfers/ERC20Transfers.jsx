@@ -11,7 +11,6 @@ function ERC20Transfers(props) {
   const { Moralis } = useMoralis();
 
   useEffect(() => {
-    console.log("sd34534fsdf", props);
     if (!props.loggedStatus) {
       props.history.push("/home");
     }

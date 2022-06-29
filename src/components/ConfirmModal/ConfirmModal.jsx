@@ -8,15 +8,13 @@ const ConfirmModal = (props) => {
   const [isTwoModalVisible, setIsTwoModalVisible] = useState(false);
   const [secondMsg, setSecMsg] = useState("");
   const handleOk = () => {
-    axios
-      .post(`https://3dc3-122-162-185-33.ngrok.io/pay-utility`)
-      .then((response) => {
-        if (response) {
-          setSecMsg(response.data[0].status);
-          props.setIsModalVisible(false);
-          setIsTwoModalVisible(true);
-        }
-      });
+    axios.post(`http://127.0.0.1:8000/pay-utility`).then((response) => {
+      if (response) {
+        setSecMsg(response.data[0].status);
+        props.setIsModalVisible(false);
+        setIsTwoModalVisible(true);
+      }
+    });
   };
 
   const handleCancel = () => {

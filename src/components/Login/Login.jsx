@@ -55,14 +55,13 @@ export default function Login(props) {
   const [lpass, setLpass] = useState("");
   const handleLogin = () => {
     axios
-      .post(`https://3dc3-122-162-185-33.ngrok.io/login`, {
+      .post(`http://127.0.0.1:8000/login`, {
         email: lemail,
         password: lpass,
       })
       .then((response) => {
         if (response.status === 200) {
           props.setLoggedStatus(true);
-          console.log("response===>", response.data[0].token);
           const session = {
             email: lemail,
             session_token: response.data[0].token,
