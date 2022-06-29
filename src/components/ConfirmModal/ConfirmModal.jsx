@@ -1,6 +1,7 @@
 import { Modal } from "antd";
 import React, { useState } from "react";
 import axios from "axios";
+import api from "../../api/local";
 import { useHistory } from "react-router-dom";
 
 const ConfirmModal = (props) => {
@@ -8,7 +9,7 @@ const ConfirmModal = (props) => {
   const [isTwoModalVisible, setIsTwoModalVisible] = useState(false);
   const [secondMsg, setSecMsg] = useState("");
   const handleOk = () => {
-    axios.post(`http://127.0.0.1:8000/pay-utility`).then((response) => {
+    axios.post(`${api.endPoint}/pay-utility`).then((response) => {
       if (response) {
         setSecMsg(response.data[0].status);
         props.setIsModalVisible(false);

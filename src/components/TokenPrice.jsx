@@ -27,7 +27,7 @@ function TokenPrice(props) {
       <img
         src={props.image || noLogoToken}
         alt="logo"
-        style={{ height: props?.size || "35px" }}
+        style={{ height: props?.size || "35px", display: "none" }}
       />
       <span
         style={{ cursor: "pointer" }}

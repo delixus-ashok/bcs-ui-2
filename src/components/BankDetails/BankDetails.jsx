@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card } from "antd";
 import axios from "axios";
+import api from "../../api/local";
 
 import { Input, Button } from "antd";
 import Text from "antd/lib/typography/Text";
@@ -70,7 +71,7 @@ export default function BankDetails() {
 
     axios
       .post(
-        `http://127.0.0.1:8000/get-estimate?payment_method=bankTransfer&vendor_name=${buser}&amount=${bamd}&account_number=${acnum}&ifsc=${ifsc}&validate=false`,
+        `${api.endPoint}/get-estimate?payment_method=bankTransfer&vendor_name=${buser}&amount=${bamd}&account_number=${acnum}&ifsc=${ifsc}&validate=false`,
         params,
       )
       .then((response) => {

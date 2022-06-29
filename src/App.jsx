@@ -31,6 +31,7 @@ const { Header, Footer } = Layout;
 import logo from "./images/delixus.png";
 // import userdata from "./userdata.json";
 import axios from "axios";
+import api from "./api/local";
 
 const styles = {
   content: {
@@ -82,7 +83,7 @@ const App = ({ isServerInfo }) => {
   const handleLogout = () => {
     const token = JSON.parse(localStorage.getItem("sessionData"));
     console.log("token===>", token);
-    axios.post(`http://127.0.0.1:8000/logout`, token).then((response) => {
+    axios.post(`${api.endPoint}/logout`, token).then((response) => {
       if (response.status === 200) {
         setLoggedStatus(false);
         localStorage.removeItem("sessionData");

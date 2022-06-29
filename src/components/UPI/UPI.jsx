@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card } from "antd";
 
 import axios from "axios";
+import api from "../../api/local";
 
 import { Input, Button } from "antd";
 import Text from "antd/lib/typography/Text";
@@ -68,7 +69,7 @@ const UPI = () => {
 
     axios
       .post(
-        `http://127.0.0.1:8000/get-estimate?payment_method=upi&vendor_name=${venuser}&upi_id=${upiid}&amount=${uamd}&account_number=39238765008&ifsc=HDFC0000053&validate=false`,
+        `${api.endPoint}/get-estimate?payment_method=upi&vendor_name=${venuser}&upi_id=${upiid}&amount=${uamd}&account_number=39238765008&ifsc=HDFC0000053&validate=false`,
       )
       .then((response) => {
         if (response) {

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Card } from "antd";
+import { Card, Modal } from "antd";
 import { UserOutlined, KeyOutlined, MailOutlined } from "@ant-design/icons";
 import { Input, Button } from "antd";
 import Text from "antd/lib/typography/Text";
 import axios from "axios";
+import api from "../../api/local";
 
 const styles = {
   title: {
@@ -54,71 +55,101 @@ export default function Register() {
   const [ruser, setRuser] = useState("");
   const [remail, setRemail] = useState("");
   const [rpass, setRpass] = useState("");
+  const [modalMsg, setModalMsg] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const handleRegister = () => {
     axios
-      .post(`http://127.0.0.1:8000/register`, {
+      .post(`${api.endPoint}/register`, {
         email: remail,
         password: rpass,
         username: ruser,
       })
       .then((response) => {
-        console.log(response);
-        setRuser("");
-        setRemail("");
-        setRpass("");
+        if (response.status === 201 || response.status === 201) {
+          setRuser("");
+          setRemail("");
+          setRpass("");
+          setModalMsg("Registration Successful");
+          setShowModal(true);
+        }
+        console.log("endPoint", response);
+      })
+      .catch((error) => {
+        if (error?.response?.data?.detail) {
+          setRemail("");
+          setModalMsg(error.response.data.detail);
+          setShowModal(true);
+        } else {
+          setModalMsg("Something went wrong, Please try again");
+          setShowModal(true);
+        }
+        console.log("endPoint", error);
       });
   };
+
+  const handleOk = () => setShowModal(false);
+
   return (
-    <Card style={styles.card}>
-      <div style={styles.select}>
-        <div style={styles.textWrapper}>
-          <Text strong>Email:</Text>
-        </div>
-        <Input
-          size="large"
-          prefix={<MailOutlined />}
-          onChange={(e) => {
-            setRemail(`${e.target.value}`);
-          }}
-          value={remail}
-        />
-      </div>
-      <div style={styles.select}>
-        <div style={styles.textWrapper}>
-          <Text strong>Name:</Text>
-        </div>
-        <Input
-          size="large"
-          prefix={<UserOutlined />}
-          onChange={(e) => {
-            setRuser(`${e.target.value}`);
-          }}
-          value={ruser}
-        />
-      </div>
-      <div style={styles.select}>
-        <div style={styles.textWrapper}>
-          <Text strong>Pass:</Text>
-        </div>
-        <Input
-          size="large"
-          prefix={<KeyOutlined />}
-          type="password"
-          onChange={(e) => {
-            setRpass(`${e.target.value}`);
-          }}
-          value={rpass}
-        />
-      </div>
-      <Button
-        type="primary"
-        size="large"
-        onClick={() => handleRegister()}
-        style={{ width: "100%", marginTop: "25px" }}
+    <>
+      <Modal
+        title="Registration Status"
+        visible={showModal}
+        onOk={handleOk}
+        cancelButtonProps={{ style: { display: "none" } }}
       >
-        Register
-      </Button>
-    </Card>
+        <p>{modalMsg}</p>
+      </Modal>
+      <Card style={styles.card}>
+        <div style={styles.select}>
+          <div style={styles.textWrapper}>
+            <Text strong>Email:</Text>
+          </div>
+          <Input
+            size="large"
+            prefix={<MailOutlined />}
+            onChange={(e) => {
+              setRemail(`${e.target.value}`);
+            }}
+            value={remail}
+          />
+        </div>
+        <div style={styles.select}>
+          <div style={styles.textWrapper}>
+            <Text strong>Name:</Text>
+          </div>
+          <Input
+            size="large"
+            prefix={<UserOutlined />}
+            onChange={(e) => {
+              setRuser(`${e.target.value}`);
+            }}
+            value={ruser}
+          />
+        </div>
+        <div style={styles.select}>
+          <div style={styles.textWrapper}>
+            <Text strong>Password:</Text>
+          </div>
+          <Input
+            size="large"
+            prefix={<KeyOutlined />}
+            type="password"
+            onChange={(e) => {
+              setRpass(`${e.target.value}`);
+            }}
+            value={rpass}
+          />
+        </div>
+        <Button
+          type="primary"
+          size="large"
+          onClick={() => handleRegister()}
+          style={{ width: "100%", marginTop: "25px" }}
+        >
+          Register
+        </Button>
+      </Card>
+    </>
   );
 }

@@ -4,6 +4,7 @@ import { MailOutlined, KeyOutlined } from "@ant-design/icons";
 import { Input, Button } from "antd";
 import Text from "antd/lib/typography/Text";
 import axios from "axios";
+import api from "../../api/local";
 
 const styles = {
   title: {
@@ -55,7 +56,7 @@ export default function Login(props) {
   const [lpass, setLpass] = useState("");
   const handleLogin = () => {
     axios
-      .post(`http://127.0.0.1:8000/login`, {
+      .post(`${api.endPoint}/login`, {
         email: lemail,
         password: lpass,
       })
@@ -86,7 +87,7 @@ export default function Login(props) {
       </div>
       <div style={styles.select}>
         <div style={styles.textWrapper}>
-          <Text strong>Pass:</Text>
+          <Text strong>Password:</Text>
         </div>
         <Input
           size="large"
