@@ -41,7 +41,13 @@ const styles = {
   },
 };
 
-function Transfer() {
+function Transfer(props) {
+  useEffect(() => {
+    if (!props.loggedStatus) {
+      props.history.push("/home");
+    }
+  }, [props.loggedStatus]);
+
   const { Moralis } = useMoralis();
   const [receiver, setReceiver] = useState();
   const [asset, setAsset] = useState();

@@ -8,9 +8,8 @@ import "antd/dist/antd.css";
 
 export default function UtilityPay(props) {
   useEffect(() => {
-    console.log("sd34534fsdf 34534", history, props.loggedStatus);
     if (!props.loggedStatus) {
-      history.push("/home");
+      props.history.push("/home");
     }
   }, [props.loggedStatus]);
   return (
