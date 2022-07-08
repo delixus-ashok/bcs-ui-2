@@ -25,7 +25,7 @@ const styles = {
   },
 };
 
-function Wallet() {
+function Wallet(props) {
   return (
     <Card
       style={styles.card}
@@ -37,7 +37,7 @@ function Wallet() {
         </div>
       }
     >
-      <Transfer />
+      <Transfer {...props} />
     </Card>
   );
 }
