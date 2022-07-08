@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Card } from "antd";
+import { Card, Dropdown, Menu } from "antd";
 import axios from "axios";
 import api from "../../api/local";
 
 import { Input, Button } from "antd";
 import Text from "antd/lib/typography/Text";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
+import { ArrowDownOutlined } from "@ant-design/icons";
 
 const styles = {
   title: {
@@ -58,8 +59,12 @@ export default function BankDetails() {
   const [ifsc, setIfsc] = useState("");
   const [bamd, setBamd] = useState("");
   const [msg, setMsg] = useState("");
+  const [token, setToken] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const onSelectItem = (value) => {
+    setToken(value);
+  };
   const handleBankDetails = () => {
     // var userdata = JSON.parse(localStorage.getItem("userdata"));
     let params = {
@@ -67,11 +72,12 @@ export default function BankDetails() {
       acnum: acnum,
       ifsc: ifsc,
       amount: bamd,
+      token: token,
     };
 
     axios
       .post(
-        `${api.endPoint}/get-estimate?payment_method=bankTransfer&vendor_name=${buser}&amount=${bamd}&account_number=${acnum}&ifsc=${ifsc}&validate=false`,
+        `${api.endPoint}/get-estimate?payment_method=bankTransfer&vendor_name=${buser}&amount=${bamd}&account_number=${acnum}&ifsc=${ifsc}&validate=false&token=${token}`,
         params,
       )
       .then((response) => {
@@ -151,6 +157,45 @@ export default function BankDetails() {
             }}
             value={bamd}
           />
+        </div>
+        <div style={styles.select}>
+          <div style={styles.textWrapper}>
+            <Text strong>Input Token:</Text>
+          </div>
+          <Input
+            size="large"
+            type="text"
+            onChange={(e) => {
+              setToken(`${e.target.value}`);
+            }}
+            value={token}
+          />
+          <Dropdown
+            overlay={
+              <Menu>
+                <Menu.Item onClick={() => onSelectItem("ETH")} key="0">
+                  ETH
+                </Menu.Item>
+                <Menu.Item onClick={() => onSelectItem("DAI")} key="1">
+                  DAI
+                </Menu.Item>
+                <Menu.Item onClick={() => onSelectItem("LINK")} key="2">
+                  LINK
+                </Menu.Item>
+                <Menu.Item onClick={() => onSelectItem("UNI")} key="3">
+                  UNI
+                </Menu.Item>
+              </Menu>
+            }
+            trigger={["click"]}
+          >
+            <a
+              className="ant-dropdown-link"
+              onClick={(e) => e.preventDefault()}
+            >
+              <ArrowDownOutlined />
+            </a>
+          </Dropdown>
         </div>
         <Button
           type="primary"
