@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Card, Dropdown, Menu } from "antd";
+import { Card, Select } from "antd";
 import axios from "axios";
 import api from "../../api/local";
 
 import { Input, Button } from "antd";
 import Text from "antd/lib/typography/Text";
 import ConfirmModal from "../ConfirmModal/ConfirmModal";
-import { ArrowDownOutlined } from "@ant-design/icons";
+import { Option } from "antd/lib/mentions";
 
 const styles = {
   title: {
@@ -162,40 +162,18 @@ export default function BankDetails() {
           <div style={styles.textWrapper}>
             <Text strong>Input Token:</Text>
           </div>
-          <Input
-            size="large"
-            type="text"
-            onChange={(e) => {
-              setToken(`${e.target.value}`);
+          <Select
+            defaultValue="ETH"
+            style={{
+              width: 180,
             }}
-            value={token}
-          />
-          <Dropdown
-            overlay={
-              <Menu>
-                <Menu.Item onClick={() => onSelectItem("ETH")} key="0">
-                  ETH
-                </Menu.Item>
-                <Menu.Item onClick={() => onSelectItem("DAI")} key="1">
-                  DAI
-                </Menu.Item>
-                <Menu.Item onClick={() => onSelectItem("LINK")} key="2">
-                  LINK
-                </Menu.Item>
-                <Menu.Item onClick={() => onSelectItem("UNI")} key="3">
-                  UNI
-                </Menu.Item>
-              </Menu>
-            }
-            trigger={["click"]}
+            onChange={onSelectItem}
           >
-            <a
-              className="ant-dropdown-link"
-              onClick={(e) => e.preventDefault()}
-            >
-              <ArrowDownOutlined />
-            </a>
-          </Dropdown>
+            <Option value="ETH">ETH</Option>
+            <Option value="DAI">DAI</Option>
+            <Option value="LINK">LINK</Option>
+            <Option value="UNI">UNI</Option>
+          </Select>
         </div>
         <Button
           type="primary"
