@@ -35,8 +35,7 @@ const styles = {
     padding: "0 10px",
   },
 };
-
-//const nativeAddress = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+const nativeAddress = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
 
 const chainIds = {
   "0x1": "eth",
@@ -147,7 +146,7 @@ function DEX({ history, loggedStatus, chain, customTokens = {} }) {
 
   useEffect(() => {
     if (!tokens || fromToken) return null;
-    setFromToken(tokens[0]);
+    setFromToken(tokens[nativeAddress]);
   }, [tokens, fromToken]);
 
   const ButtonState = useMemo(() => {
@@ -251,6 +250,7 @@ function DEX({ history, loggedStatus, chain, customTokens = {} }) {
                 border: "none",
               }}
               onClick={() => setFromModalActive(true)}
+              type={fromToken ? "default" : "primary"}
             >
               {fromToken ? (
                 <Image
