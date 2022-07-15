@@ -182,6 +182,7 @@ const App = ({ isServerInfo }) => {
                 </Tabs>
               )}
             />
+
             <Route
               path="/home"
               render={(props) => (
