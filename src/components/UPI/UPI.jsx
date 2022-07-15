@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card } from "antd";
+import { Card, Select } from "antd";
 
 import axios from "axios";
 import api from "../../api/local";
@@ -7,6 +7,7 @@ import api from "../../api/local";
 import { Input, Button } from "antd";
 import Text from "antd/lib/typography/Text";
 import ConfirmModalUpi from "../ConfirmModalUpi/ConfirmModalUpi";
+import { Option } from "antd/lib/mentions";
 const styles = {
   title: {
     fontSize: "30px",
@@ -58,6 +59,11 @@ const UPI = () => {
   const [uamd, setUamd] = useState("");
   const [msg, setMsg] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [token, setToken] = useState("");
+
+  const onSelectItem = (value) => {
+    setToken(value);
+  };
 
   const handleUPI = () => {
     // var userdata = JSON.parse(localStorage.getItem("userdata"));
@@ -69,7 +75,7 @@ const UPI = () => {
 
     axios
       .post(
-        `${api.endPoint}/get-estimate?payment_method=upi&vendor_name=${venuser}&upi_id=${upiid}&amount=${uamd}&account_number=39238765008&ifsc=HDFC0000053&validate=false`,
+        `${api.endPoint}/get-estimate?payment_method=upi&vendor_name=${venuser}&upi_id=${upiid}&amount=${uamd}&account_number=39238765008&ifsc=HDFC0000053&validate=false&token=${token}`,
       )
       .then((response) => {
         if (response) {
@@ -136,6 +142,22 @@ const UPI = () => {
             }}
             value={uamd}
           />
+        </div>
+        <div style={styles.select}>
+          <div style={styles.textWrapper}>
+            <Text strong>Input Token:</Text>
+          </div>
+          <Select
+            style={{
+              width: 180,
+            }}
+            onChange={onSelectItem}
+          >
+            <Option value="ETH">ETH</Option>
+            <Option value="DAI">DAI</Option>
+            <Option value="LINK">LINK</Option>
+            <Option value="UNI">UNI</Option>
+          </Select>
         </div>
         <Button
           type="primary"

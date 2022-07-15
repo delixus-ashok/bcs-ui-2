@@ -163,7 +163,6 @@ export default function BankDetails() {
             <Text strong>Input Token:</Text>
           </div>
           <Select
-            defaultValue="ETH"
             style={{
               width: 180,
             }}
