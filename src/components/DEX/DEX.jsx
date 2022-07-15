@@ -36,7 +36,7 @@ const styles = {
   },
 };
 
-const nativeAddress = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+//const nativeAddress = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
 
 const chainIds = {
   "0x1": "eth",
@@ -66,6 +66,9 @@ function DEX({ history, loggedStatus, chain, customTokens = {} }) {
   const [currentTrade, setCurrentTrade] = useState();
   const { fetchTokenPrice } = useTokenPrice();
   const [tokenPricesUSD, setTokenPricesUSD] = useState({});
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResult, setsearchResult] = useState([]);
 
   useEffect(() => {
     if (!loggedStatus) {
@@ -144,7 +147,7 @@ function DEX({ history, loggedStatus, chain, customTokens = {} }) {
 
   useEffect(() => {
     if (!tokens || fromToken) return null;
-    setFromToken(tokens[nativeAddress]);
+    setFromToken(tokens[0]);
   }, [tokens, fromToken]);
 
   const ButtonState = useMemo(() => {
@@ -186,6 +189,22 @@ function DEX({ history, loggedStatus, chain, customTokens = {} }) {
         ].toFixed(6)})`}</Text>
       </Text>
     );
+  };
+
+  const searchhandler = (searchTerm) => {
+    setSearchTerm(searchTerm);
+    if (searchTerm !== "") {
+      const newTokenList = tokenList.filter((token) => {
+        return Object.values(token)
+          .join(" ")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+      });
+
+      setsearchResult(newTokenList);
+    } else {
+      setsearchResult(tokenList);
+    }
   };
 
   return (
@@ -257,6 +276,7 @@ function DEX({ history, loggedStatus, chain, customTokens = {} }) {
         >
           <ArrowDownOutlined />
         </div>
+
         <Card
           style={{ borderRadius: "1rem" }}
           bodyStyle={{ padding: "0.8rem" }}
@@ -372,7 +392,9 @@ function DEX({ history, loggedStatus, chain, customTokens = {} }) {
           open={isFromModalActive}
           onClose={() => setFromModalActive(false)}
           setToken={setFromToken}
-          tokenList={tokens}
+          tokenList={searchTerm < 1 ? tokens : searchResult}
+          term={searchTerm}
+          searchkeyword={searchhandler}
         />
       </Modal>
       <Modal
@@ -387,7 +409,9 @@ function DEX({ history, loggedStatus, chain, customTokens = {} }) {
           open={isToModalActive}
           onClose={() => setToModalActive(false)}
           setToken={setToToken}
-          tokenList={tokens}
+          tokenList={searchTerm < 1 ? tokens : searchResult}
+          term={searchTerm}
+          searchkeyword={searchhandler}
         />
       </Modal>
     </>

@@ -9,7 +9,7 @@ const useInchDex = (chain) => {
     if (!Moralis?.["Plugins"]?.["oneInch"]) return null;
     Moralis.Plugins.oneInch
       .getSupportedTokens({ chain })
-      .then((tokens) => setTokenlist(tokens.tokens));
+      .then((tokens) => setTokenlist(Object.values(tokens.tokens)));
   }, [Moralis, Moralis.Plugins, chain]);
 
   const getQuote = async (params) =>
